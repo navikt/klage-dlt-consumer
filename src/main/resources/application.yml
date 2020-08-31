@@ -1,0 +1,43 @@
+spring:
+  main:
+    banner-mode: OFF
+  codec:
+    max-in-memory-size: 10MB
+  sleuth:
+    propagation-keys:
+      - Nav-Callid
+      - Nav-Consumer-Id
+    log:
+      slf4j:
+        whitelisted-mdc-keys:
+          - Nav-Callid
+          - Nav-Consumer-Id
+
+server:
+  port: 7079
+  error:
+    whitelabel:
+      enabled: false
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints.web:
+    exposure:
+      include: info, health, metrics, prometheus
+    base-path: "/internal"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+
+KAFKA_GROUP_ID: klage-dlt-consumer
+KAFKA_TOPIC: aapen-klager-klageOpprettet-dlt
+
+SERVICE_USER_USERNAME: srvklage-dittnav
+
+# 0 0 9,12,16 * * MON-FRI
+DLT_CHECK_CRON: 0 0 9,12,16 * * MON-FRI
