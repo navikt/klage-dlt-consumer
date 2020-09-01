@@ -30,6 +30,7 @@ apply(plugin = "io.spring.dependency-management")
 dependencies {
     implementation(kotlin("stdlib"))
 
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.cloud:spring-cloud-starter-sleuth:$springSleuthVersion")
 
