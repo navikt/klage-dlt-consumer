@@ -50,8 +50,6 @@ class KlageKafkaConsumer(
                 logger.debug("Sending failed klage to original topic")
                 secureLogger.debug("Previously failed klage received from DLT: {}", record.value())
                 runCatching {
-                    logger.debug(record.toString())
-                    logger.debug(record.value())
                     kafkaTemplate.send(topic.removeSuffix("-DLT"), record.value())
 
                     successfullySent++
