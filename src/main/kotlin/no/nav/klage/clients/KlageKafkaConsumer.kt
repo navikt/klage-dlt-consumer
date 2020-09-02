@@ -7,6 +7,7 @@ import no.nav.klage.getLogger
 import no.nav.klage.getSecureLogger
 import no.nav.slackposter.Severity
 import no.nav.slackposter.SlackClient
+import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.KafkaTemplate
@@ -40,7 +41,7 @@ class KlageKafkaConsumer(
         var failedRecordsCount = 0
 
         runCatching {
-            val failedRecords = kafkaConsumer.poll(Duration.ofSeconds(5))
+            val failedRecords = getFailedRecords()
             failedRecordsCount = failedRecords.count()
             logger.debug("Found $failedRecordsCount failed records")
             slackClient.postMessage("Fant $failedRecordsCount klager som har feilet", Severity.INFO)
@@ -49,7 +50,9 @@ class KlageKafkaConsumer(
                 logger.debug("Sending failed klage to original topic")
                 secureLogger.debug("Previously failed klage received from DLT: {}", record.value())
                 runCatching {
-                    kafkaTemplate.send(topic, record.value())
+                    logger.debug(record.toString())
+                    logger.debug(record.value())
+                    kafkaTemplate.send(topic.removeSuffix("-DLT"), record.value())
 
                     successfullySent++
                     logger.debug("Klage sent back successfully")
@@ -77,6 +80,21 @@ class KlageKafkaConsumer(
                 Severity.INFO
             )
         }
+    }
+
+    private fun getFailedRecords(): ConsumerRecords<String, String> {
+        val maxTries = 5
+        var tries = 0
+        while (true) {
+            val records = kafkaConsumer.poll(Duration.ofSeconds(2))
+            if (records.count() > 0) {
+                return records
+            }
+            if (++tries >= maxTries) {
+                break
+            }
+        }
+        return ConsumerRecords.empty()
     }
 
     private fun rootCause(t: Throwable): Throwable = t.cause?.run { rootCause(this) } ?: t
