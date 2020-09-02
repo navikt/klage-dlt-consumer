@@ -40,4 +40,4 @@ KAFKA_TOPIC: aapen-klager-klageOpprettet-DLT
 SERVICE_USER_USERNAME: srvklage-dittnav
 
 # 0 0 9,12,16 * * MON-FRI
-DLT_CHECK_CRON: 0 0/10 8-16 * * MON-FRI
+DLT_CHECK_CRON: 0 0 9,12,16 * * MON-FRI
