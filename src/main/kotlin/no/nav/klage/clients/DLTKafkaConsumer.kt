@@ -1,7 +1,5 @@
 package no.nav.klage.clients
 
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.klage.common.KlageMetrics
 import no.nav.klage.getLogger
 import no.nav.klage.getSecureLogger
@@ -16,7 +14,7 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 
 @Component
-class KlageKafkaConsumer(
+class DLTKafkaConsumer(
     private val slackClient: SlackClient,
     private val kafkaConsumer: KafkaConsumer<String, String>,
     private val kafkaTemplate: KafkaTemplate<String, String>,
@@ -50,6 +48,7 @@ class KlageKafkaConsumer(
                 logger.debug("Sending failed klage to original topic")
                 secureLogger.debug("Previously failed klage received from DLT: {}", record.value())
                 runCatching {
+                    //Send to original topic
                     kafkaTemplate.send(topic.removeSuffix("-DLT"), record.value())
 
                     successfullySent++
