@@ -1,0 +1,45 @@
+{
+  "topics": [
+    {
+      "configEntries": {
+        "retention.ms": -1
+      },
+      "members": [
+        {
+          "member": "srvklage-dittnav",
+          "role": "PRODUCER"
+        },
+        {
+          "member": "srvklage-dittnav",
+          "role": "CONSUMER"
+        },
+        {
+          "member": "J158513",
+          "role": "MANAGER"
+        },
+        {
+          "member": "B152650",
+          "role": "MANAGER"
+        },
+        {
+          "member": "W132204",
+          "role": "MANAGER"
+        },
+        {
+          "member": "H149390",
+          "role": "MANAGER"
+        },
+        {
+          "member": "K153952",
+          "role": "MANAGER"
+        },
+        {
+          "member": "H158523",
+          "role": "MANAGER"
+        }
+      ],
+      "numPartitions": 1,
+      "topicName": "aapen-klager-klageOpprettet-DLT"
+    }
+  ]
+}
