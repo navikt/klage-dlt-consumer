@@ -14,11 +14,11 @@ jobs:
       - uses: actions/checkout@master
         name: Checkout code
       - name: Generate release version
-          run: |
-            TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
-            COMMIT=$(git rev-parse --short=7 HEAD)
-            VERSION=$TIME-$COMMIT
-            echo "::set-env name=VERSION::"$VERSION""
+        run: |
+          TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
+          COMMIT=$(git rev-parse --short=7 HEAD)
+          VERSION=$TIME-$COMMIT
+          echo "::set-env name=VERSION::"$VERSION""
       - uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
