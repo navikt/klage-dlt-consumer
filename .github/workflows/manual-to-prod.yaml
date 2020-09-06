@@ -13,12 +13,18 @@ jobs:
     steps:
       - uses: actions/checkout@master
         name: Checkout code
+      - name: Generate release version
+          run: |
+            TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
+            COMMIT=$(git rev-parse --short=7 HEAD)
+            VERSION=$TIME-$COMMIT
+            echo "::set-env name=VERSION::"$VERSION""
       - uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.sha }}
-          release_name: ${{ github.sha }}
+          tag_name: ${{ env.VERSION }}
+          release_name: ${{ env.VERSION }}
       - name: Post failures to Slack
         if: failure()
         run: |
