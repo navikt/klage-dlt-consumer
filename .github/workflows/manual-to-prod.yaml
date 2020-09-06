@@ -13,6 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@master
         name: Checkout code
+      - uses: nais/deploy/actions/deploy@master
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_API_KEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: deploy/nais.yaml
+          VARS: deploy/prod.yaml
       - name: Generate release version
         run: |
           TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
