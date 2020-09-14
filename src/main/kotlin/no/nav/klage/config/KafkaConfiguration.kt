@@ -2,7 +2,6 @@ package no.nav.klage.config
 
 import org.apache.kafka.clients.CommonClientConfigs.SECURITY_PROTOCOL_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.config.SslConfigs
@@ -11,7 +10,9 @@ import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.kafka.core.*
+import org.springframework.kafka.core.DefaultKafkaProducerFactory
+import org.springframework.kafka.core.KafkaTemplate
+import org.springframework.kafka.core.ProducerFactory
 import java.io.File
 import java.util.*
 
@@ -31,16 +32,6 @@ class KafkaConfiguration {
     @Value("\${SERVICE_USER_PASSWORD}")
     private lateinit var password: String
 
-    @Value("\${KAFKA_TOPIC}")
-    private lateinit var topic: String
-
-    @Bean
-    fun kafkaConsumer(): KafkaConsumer<String, String> {
-        val kafkaConsumer = KafkaConsumer<String, String>(consumerProps())
-        kafkaConsumer.subscribe(listOf(topic))
-        return kafkaConsumer
-    }
-
     @Bean
     fun producerFactory(): ProducerFactory<String, String> {
         return DefaultKafkaProducerFactory(producerProps())
@@ -51,8 +42,7 @@ class KafkaConfiguration {
         return KafkaTemplate(producerFactory())
     }
 
-    @Bean
-    fun producerProps(): Map<String, Any> {
+    private fun producerProps(): Map<String, Any> {
         val props: MutableMap<String, Any> = HashMap()
         props[ProducerConfig.CLIENT_ID_CONFIG] = "clientId"
         props[ProducerConfig.ACKS_CONFIG] = "all"
@@ -63,13 +53,14 @@ class KafkaConfiguration {
         return props
     }
 
-    private fun consumerProps(): Map<String, Any> {
+    @Bean
+    fun consumerProps(): Map<String, Any> {
         val props = mutableMapOf<String, Any>()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapServers
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
         props[ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG] = Integer.MAX_VALUE
-        props[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = true
-        props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "latest"
+        props[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = false
+        props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props.putAll(commonSecurityProps())
