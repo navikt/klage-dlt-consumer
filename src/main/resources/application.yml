@@ -37,6 +37,9 @@ management:
 KAFKA_GROUP_ID: klage-dlt-consumer
 KAFKA_TOPIC: aapen-klager-klageOpprettet-DLT
 
+navCallId: Nav-Callid
+navConsumerId: Nav-Consumer-Id
+
 SERVICE_USER_USERNAME: srvklage-dittnav
 
 # 0 0 9,12,16 * * MON-FRI
