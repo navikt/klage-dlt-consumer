@@ -10,7 +10,6 @@ spec:
   azure:
     application:
       enabled: true
-      tenant: nav.no
   port: 7079
   liveness:
     path: /internal/health
