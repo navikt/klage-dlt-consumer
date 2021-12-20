@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val logstashVersion = "5.1"
-val springSleuthVersion = "2.2.3.RELEASE"
+val springSleuthVersion = "3.0.4"
 
 val githubUser: String by project
 val githubPassword: String by project
@@ -19,9 +19,9 @@ repositories {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.4.0"
-    id("org.springframework.boot") version "2.2.6.RELEASE"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.4.0"
+    id("org.jetbrains.kotlin.jvm") version "1.6.0"
+    id("org.springframework.boot") version "2.5.7"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.6.0"
     idea
 }
 
@@ -51,19 +51,20 @@ idea {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions{
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "17"
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
     this.archiveFileName.set("app.jar")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
-kotlin.sourceSets["main"].kotlin.srcDirs("src/main/kotlin")
-kotlin.sourceSets["test"].kotlin.srcDirs("src/test/kotlin")
-
-sourceSets["main"].resources.srcDirs("src/main/resources")
-sourceSets["test"].resources.srcDirs("src/test/resources")
