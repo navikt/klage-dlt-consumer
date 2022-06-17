@@ -36,8 +36,7 @@ management:
     tags:
       application: ${spring.application.name}
 
-KAFKA_GROUP_ID: klage-dlt-consumer
-KAFKA_TOPIC: aapen-klager-klageOpprettet-DLT
+KAFKA_TOPIC: klage.privat-klage-mottatt-v1-DLT
 
 SERVICE_USER_USERNAME: srvklage-dittnav
 
