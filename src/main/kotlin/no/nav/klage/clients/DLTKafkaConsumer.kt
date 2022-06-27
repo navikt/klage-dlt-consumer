@@ -59,7 +59,7 @@ class DLTKafkaConsumer(
                     secureLogger.debug("Previously failed klage received from DLT: {}", record.value())
                     runCatching {
                         //Send to original topic
-                        kafkaTemplate.send(topic.removeSuffix("-DLT"), record.value())
+                        kafkaTemplate.send(topic.removeSuffix("-dlt"), record.value())
 
                         successfullySent++
                         logger.debug("Klage sent back successfully")
