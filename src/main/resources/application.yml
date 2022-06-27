@@ -36,7 +36,7 @@ management:
     tags:
       application: ${spring.application.name}
 
-KAFKA_TOPIC: klage.privat-klage-mottatt-v1-DLT
+KAFKA_TOPIC: klage.privat-klage-mottatt-v1-dlt
 
 SERVICE_USER_USERNAME: srvklage-dittnav
 
