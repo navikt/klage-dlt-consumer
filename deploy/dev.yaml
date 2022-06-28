@@ -4,4 +4,5 @@ externalHosts:
   - b27apvl00047.preprod.local
   - hooks.slack.com
 springProfile: dev-gcp
+kafka_pool: nav-dev
 
