@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val logstashVersion = "5.1"
+val logstashVersion = "7.2"
 val springSleuthVersion = "3.0.4"
 
 val githubUser: String by project
