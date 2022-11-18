@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val logstashVersion = "7.2"
-val springSleuthVersion = "3.1.4"
+val springSleuthVersion = "3.1.5"
 
 repositories {
     mavenCentral()
