@@ -32,7 +32,7 @@ dependencies {
 
     implementation("org.springframework.kafka:spring-kafka")
 
-    implementation("com.github.navikt:simple-slack-poster:0.0.3")
+    implementation("com.github.navikt:simple-slack-poster:0.0.5")
 }
 
 idea {
