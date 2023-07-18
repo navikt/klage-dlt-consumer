@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val logstashVersion = "7.4"
-val simpleSlackPosterVersion = "0.1.0"
+val simpleSlackPosterVersion = "0.1.4"
 
 repositories {
     mavenCentral()
-    maven("https://jitpack.io")
+    maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
 }
 
 plugins {
@@ -33,7 +33,7 @@ dependencies {
 
     implementation("org.springframework.kafka:spring-kafka")
 
-    implementation("com.github.navikt:simple-slack-poster:$simpleSlackPosterVersion")
+    implementation("no.nav.slackposter:simple-slack-poster:$simpleSlackPosterVersion")
 }
 
 idea {
