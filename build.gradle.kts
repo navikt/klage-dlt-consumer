@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val logstashVersion = "7.4"
-val simpleSlackPosterVersion = "0.1.5"
+val simpleSlackPosterVersion = "0.1.6"
 
 repositories {
     mavenCentral()
