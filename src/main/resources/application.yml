@@ -42,4 +42,4 @@ KAFKA_TOPIC: klage.privat-klage-mottatt-v1-dlt
 SERVICE_USER_USERNAME: srvklage-dittnav
 
 # 0 0 9,12,16 * * MON-FRI
-DLT_CHECK_CRON: 0 0 9,12,16 * * MON-FRI
+DLT_CHECK_CRON: 0 0 9,12,13 * * MON-FRI
