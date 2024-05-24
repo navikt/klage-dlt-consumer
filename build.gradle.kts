@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val logstashVersion = "7.4"
-val simpleSlackPosterVersion = "0.1.8"
+val simpleSlackPosterVersion = "0.2.2"
 
 repositories {
     mavenCentral()
@@ -9,8 +9,8 @@ repositories {
 }
 
 plugins {
-    val kotlinVersion = "1.9.21"
-    id("org.springframework.boot") version "3.2.0"
+    val kotlinVersion = "2.0.0"
+    id("org.springframework.boot") version "3.3.0"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     idea
