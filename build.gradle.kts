@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val logstashVersion = "7.4"
-val simpleSlackPosterVersion = "0.1.8"
+val logstashVersion = "8.0"
+val simpleSlackPosterVersion = "0.2.2"
 
 repositories {
     mavenCentral()
@@ -9,8 +9,8 @@ repositories {
 }
 
 plugins {
-    val kotlinVersion = "1.9.21"
-    id("org.springframework.boot") version "3.2.0"
+    val kotlinVersion = "2.0.21"
+    id("org.springframework.boot") version "3.3.5"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     idea
@@ -42,12 +42,12 @@ idea {
     }
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 tasks.withType<KotlinCompile> {
     kotlinOptions{
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 }
 
