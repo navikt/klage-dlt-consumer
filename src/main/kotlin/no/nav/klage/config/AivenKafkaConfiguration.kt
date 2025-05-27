@@ -1,7 +1,6 @@
 package no.nav.klage.config
 
 import no.nav.klage.getLogger
-import no.nav.klage.getSecureLogger
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -31,7 +30,6 @@ class AivenKafkaConfiguration(
     companion object {
         @Suppress("JAVA_CLASS_ON_COMPANION")
         private val logger = getLogger(javaClass.enclosingClass)
-        private val secureLogger = getSecureLogger()
     }
 
     @Bean

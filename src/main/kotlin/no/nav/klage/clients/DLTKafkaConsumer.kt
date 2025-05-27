@@ -2,7 +2,7 @@ package no.nav.klage.clients
 
 import no.nav.klage.common.KlageMetrics
 import no.nav.klage.getLogger
-import no.nav.klage.getSecureLogger
+import no.nav.klage.getTeamLogger
 import no.nav.slackposter.Severity
 import no.nav.slackposter.SlackClient
 import org.apache.kafka.clients.consumer.ConsumerRecords
@@ -24,7 +24,7 @@ class DLTKafkaConsumer(
     companion object {
         @Suppress("JAVA_CLASS_ON_COMPANION")
         private val logger = getLogger(javaClass.enclosingClass)
-        private val secureLogger = getSecureLogger()
+        private val teamLogger = getTeamLogger()
     }
 
     fun kafkaConsumer(): KafkaConsumer<String, String> {
@@ -55,8 +55,8 @@ class DLTKafkaConsumer(
                 kafkaConsumer.commitSync()
 
                 failedRecords.forEach { record ->
-                    logger.debug("Sending failed klage to original topic")
-                    secureLogger.debug("Previously failed klage received from DLT: {}", record.value())
+                    logger.debug("Sending failed klage to original topic. See team-logs for more details.")
+                    teamLogger.debug("Previously failed klage received from DLT: {}", record.value())
                     runCatching {
                         //Send to original topic
                         kafkaTemplate.send(topic.removeSuffix("-dlt"), record.value())
@@ -67,8 +67,8 @@ class DLTKafkaConsumer(
                         //Record metrics
                         klageMetrics.incrementKlagerResent()
                     }.onFailure { failure ->
-                        logger.error("Could not send klage. See secure logs for details.")
-                        secureLogger.error("Failed to send failed klage message back to original topic", failure)
+                        logger.error("Could not send klage. See team-logs for details.")
+                        teamLogger.error("Failed to send failed klage message back to original topic", failure)
                         slackClient.postMessage(
                             "Kunne ikke legge tilbake feilet klage til klage-topic! " +
                                     "(${causeClass(rootCause(failure))})", Severity.ERROR

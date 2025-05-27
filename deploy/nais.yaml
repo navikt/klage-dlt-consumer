@@ -37,11 +37,12 @@ spec:
   prometheus:
     enabled: true
     path: /internal/prometheus
-  secureLogs:
-    enabled: true
   webproxy: true
   accessPolicy:
     outbound:
+      rules:
+        - application: logging
+          namespace: nais-system
       external:
       {{#each externalHosts as |host|}}
         - host: {{host}}
