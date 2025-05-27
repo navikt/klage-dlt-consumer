@@ -14,9 +14,6 @@ jobs:
       contents: write
       id-token: write
     uses: ./.github/workflows/deploy-to-dev.yaml
-    secrets:
-      NAIS_DEPLOY_API_KEY: ${{ secrets.NAIS_DEPLOY_API_KEY }}
-      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
   deploy_to_prod:
     name: Prod
@@ -25,6 +22,3 @@ jobs:
       id-token: write
     needs: deploy_to_dev
     uses: ./.github/workflows/deploy-to-prod.yaml
-    secrets:
-      NAIS_DEPLOY_API_KEY: ${{ secrets.NAIS_DEPLOY_API_KEY }}
-      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
