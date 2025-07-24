@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val logstashVersion = "8.1"
@@ -9,8 +10,8 @@ repositories {
 }
 
 plugins {
-    val kotlinVersion = "2.1.21"
-    id("org.springframework.boot") version "3.5.0"
+    val kotlinVersion = "2.2.0"
+    id("org.springframework.boot") version "3.5.3"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     idea
@@ -45,9 +46,9 @@ idea {
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions{
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "21"
     }
 }
 
