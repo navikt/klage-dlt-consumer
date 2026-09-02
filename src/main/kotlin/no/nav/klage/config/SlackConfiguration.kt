@@ -7,15 +7,16 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class SlackConfiguration {
-    @Value("\${SLACK_URL}")
+    @Value($$"${SLACK_URL}")
     lateinit var url: String
 
-    @Value("\${SLACK_CHANNEL_ID}")
+    @Value($$"${SLACK_CHANNEL_ID}")
     lateinit var channelId: String
 
-    @Value("\${NAIS_CLUSTER_NAME}")
+    @Value($$"${NAIS_CLUSTER_NAME}")
     lateinit var cluster: String
 
     @Bean
-    fun slackClient(): SlackClient = SlackClient(url, channelId, "klage-dlt-consumer", cluster)
+    fun slackClient(): SlackClient =
+        SlackClient(webhookUrl = url, channel = channelId, application = "klage-dlt-consumer", clusterName = cluster)
 }
