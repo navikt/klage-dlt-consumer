@@ -18,9 +18,8 @@ class DLTKafkaConsumer(
     private val slackClient: SlackClient,
     private val consumerProps: Map<String, Any>,
     private val kafkaTemplate: KafkaTemplate<String, String>,
-    private val klageMetrics: KlageMetrics
+    private val klageMetrics: KlageMetrics,
 ) {
-
     companion object {
         @Suppress("JAVA_CLASS_ON_COMPANION")
         private val logger = getLogger(javaClass.enclosingClass)
@@ -33,14 +32,14 @@ class DLTKafkaConsumer(
         return kafkaConsumer
     }
 
-    @Value("\${KAFKA_TOPIC}")
+    @Value($$"${KAFKA_TOPIC}")
     private lateinit var topic: String
 
-    @Scheduled(cron = "\${DLT_CHECK_CRON}", zone = "Europe/Oslo")
+    @Scheduled(cron = $$"${DLT_CHECK_CRON}", zone = "Europe/Oslo")
     fun dltListener() {
         kafkaConsumer().use { kafkaConsumer ->
             logger.debug("Looking for failed klager from DLT")
-            slackClient.postMessage("Sjekker DLT for klager som feilet", Severity.INFO)
+            slackClient.postMessage(text = "Sjekker DLT for klager som feilet", severity = Severity.INFO)
 
             var successfullySent = 0
             var failedRecordsCount = 0
@@ -49,29 +48,31 @@ class DLTKafkaConsumer(
                 val failedRecords = getFailedRecords(kafkaConsumer)
                 failedRecordsCount = failedRecords.count()
                 logger.debug("Found $failedRecordsCount failed records")
-                slackClient.postMessage("Fant $failedRecordsCount klager som har feilet", Severity.INFO)
+                slackClient.postMessage(text = "Fant $failedRecordsCount klager som har feilet", severity = Severity.INFO)
 
-                //Mark records as read, even if they fail later, to make sure we don't read them again.
+                // Mark records as read, even if they fail later, to make sure we don't read them again.
                 kafkaConsumer.commitSync()
 
                 failedRecords.forEach { record ->
                     logger.debug("Sending failed klage to original topic. See team-logs for more details.")
                     teamLogger.debug("Previously failed klage received from DLT: {}", record.value())
                     runCatching {
-                        //Send to original topic
+                        // Send to original topic
                         kafkaTemplate.send(topic.removeSuffix("-dlt"), record.value())
 
                         successfullySent++
                         logger.debug("Klage sent back successfully")
 
-                        //Record metrics
+                        // Record metrics
                         klageMetrics.incrementKlagerResent()
                     }.onFailure { failure ->
                         logger.error("Could not send klage. See team-logs for details.")
                         teamLogger.error("Failed to send failed klage message back to original topic", failure)
                         slackClient.postMessage(
-                            "Kunne ikke legge tilbake feilet klage til klage-topic! " +
-                                    "(${causeClass(rootCause(failure))})", Severity.ERROR
+                            text =
+                                "Kunne ikke legge tilbake feilet klage til klage-topic! " +
+                                    "(${causeClass(rootCause(failure))})",
+                            severity = Severity.ERROR,
                         )
                     }
                 }
@@ -79,12 +80,12 @@ class DLTKafkaConsumer(
                 logger.error("Could not poll from DLT", it)
             }
 
-            //Only log if there is something to report back
+            // Only log if there is something to report back
             if (failedRecordsCount > 0) {
                 logger.debug("In total, $successfullySent klager was sent back to original topic")
                 slackClient.postMessage(
-                    "Totalt $successfullySent klager ble sendt tilbake til opprinnelig topic for behandling",
-                    Severity.INFO
+                    text = "Totalt $successfullySent klager ble sendt tilbake til opprinnelig topic for behandling",
+                    severity = Severity.INFO,
                 )
             }
         }
