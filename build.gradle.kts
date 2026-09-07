@@ -4,7 +4,7 @@ import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 val ktlintVersion = "1.8.0"
 val logstashVersion = "9.0"
-val simpleSlackPosterVersion = "1.0.0"
+val simpleSlackPosterVersion = "1.1.1"
 
 plugins {
     val kotlinVersion = "2.4.10"
