@@ -8,7 +8,7 @@ val logstashVersion = "9.0"
 val simpleSlackPosterVersion = "1.0.0"
 
 plugins {
-    val kotlinVersion = "2.4.10"
+    val kotlinVersion = "2.4.20"
     id("org.springframework.boot") version "4.1.1"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
@@ -34,6 +34,12 @@ detekt {
     buildUponDefaultConfig.set(true)
     ignoreFailures.set(false)
 }
+
+// Temporary override: tomcat-embed-core 11.0.24 from the Spring Boot BOM has CVE-2026-65905.
+// Remove when Spring Boot ships 11.0.25 or newer.
+extra["tomcat.version"] = "11.0.25"
+
+apply(plugin = "io.spring.dependency-management")
 
 // io.spring.dependency-management applies the Kotlin BOM to every configuration,
 // which would force the linters onto the project's Kotlin compiler. Both tools are
@@ -77,12 +83,6 @@ tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
 tasks.named("check") {
     dependsOn("detektMain", "detektTest")
 }
-
-// Temporary override: tomcat-embed-core 11.0.24 from the Spring Boot BOM has CVE-2026-65905.
-// Remove when Spring Boot ships 11.0.25 or newer.
-extra["tomcat.version"] = "11.0.25"
-
-apply(plugin = "io.spring.dependency-management")
 
 java.sourceCompatibility = JavaVersion.VERSION_21
 
